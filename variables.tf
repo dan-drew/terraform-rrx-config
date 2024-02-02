@@ -7,19 +7,16 @@ variable "environment" {
   }
 }
 
-variable "secret_key_base" {
-  type = string
-}
-
 variable "db" {
   type = object({
-    type     = string
-    host     = string
-    port     = optional(number)
-    name     = string
-    user     = string
-    password = optional(string)
-    iam      = optional(bool)
+    resource_id = string
+    type        = string
+    host        = string
+    port        = optional(number)
+    name        = string
+    user        = string
+    password    = optional(string)
+    iam         = optional(bool)
   })
   default     = null
   description = "Database config with: name, host, port, user and password items"
@@ -34,7 +31,7 @@ variable "config" {
   default     = {}
   description = "Optional arbitrary app config"
   validation {
-    condition     = startwith(jsonencode(var.config), "{")
+    condition     = startswith(jsonencode(var.config), "{")
     error_message = "Must be an object value"
   }
 }
@@ -52,4 +49,10 @@ variable "memcache" {
   })
   default     = null
   description = "Memcache server"
+}
+
+variable "aws_secret" {
+  type        = string
+  default     = null
+  description = "Create an AWS secret to store the config"
 }
